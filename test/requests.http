@@ -1,0 +1,58 @@
+### Get all polygon IDs
+GET http://localhost:8080/api/polygons HTTP/1.1
+
+### Fetch specific polygon
+GET http://localhost:8080/api/polygons/alaska_1 HTTP/1.1
+
+### Fetch non-existing polygon
+GET http://localhost:8080/api/polygons/alaska_abc HTTP/1.1
+
+### Point search
+POST http://localhost:8080/api/search/polygons/by_polygon HTTP/1.1
+content-type: application/json
+
+{
+    "polygon": [
+        [
+            [
+                -149.87900733947754,
+                61.21638753760956
+            ],
+            [
+                -149.87591743469238,
+                61.209857078102694
+            ],
+            [
+                -149.8667335510254,
+                61.20989841438479
+            ],
+            [
+                -149.86724853515625,
+                61.216676830427915
+            ],
+            [
+                -149.87900733947754,
+                61.21638753760956
+            ]
+        ]
+    ]
+}
+
+### Polygon search
+POST http://localhost:8080/api/search/polygons/by_point HTTP/1.1
+content-type: application/json
+
+{
+    "point": [
+        -149.89213943481445,
+        61.211965159297186
+    ]
+}
+
+### Fetch a couple of polygons
+POST http://localhost:8080/api/polygons HTTP/1.1
+content-type: application/json
+
+{
+    "ids": ["alaska_1", "alaska_2ddd"]
+}
