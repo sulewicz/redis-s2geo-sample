@@ -33,13 +33,7 @@ func createIndex(ctx context.Context, client *redis.Client, indexName string) (b
 }
 
 func populateIndex(ctx context.Context, client *redis.Client, indexName string, fc *geojson.FeatureCollection) error {
-	const STEP = 10
-	increment := len(fc.Features) / STEP
-	for idx, feature := range fc.Features {
-		if (idx+1)%increment == 0 {
-			log.Printf("Populating progress: %d%%\n", (100 * (idx + 1) / len(fc.Features)))
-		}
-
+	for _, feature := range fc.Features {
 		if feature.Geometry.Type != geojson.GeometryPolygon {
 			continue
 		}
@@ -50,7 +44,6 @@ func populateIndex(ctx context.Context, client *redis.Client, indexName string, 
 			log.Printf("error while storing polygon %s (%s): %v\n", id, body, err)
 		}
 	}
-	log.Printf("Populating finished!")
 	return nil
 }
 
@@ -76,6 +69,8 @@ func parseFeatureCollection(path string) (*geojson.FeatureCollection, error) {
 
 func assignIdentifiers(fc *geojson.FeatureCollection, prefix string) {
 	for idx, feature := range fc.Features {
-		feature.SetProperty(_ID, fmt.Sprintf("%s_%d", prefix, idx))
+		if _, ok := feature.Properties[_ID]; !ok {
+			feature.SetProperty(_ID, fmt.Sprintf("%s_%d", prefix, idx))
+		}
 	}
 }
