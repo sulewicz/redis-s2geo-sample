@@ -27,8 +27,8 @@ func main() {
 	log.Println("Index name: ", indexName)
 	server := server.New()
 	if err := server.Bootstrap("localhost:6379", indexName, assetPath); err != nil {
-		log.Println("Setup failed, but moving on with static content... ")
-		log.Println(err)
+		log.Println("Setup failed. Make sure your local Redis instance is running.")
+		panic(err)
 	}
 
 	if err := server.Run(); err != nil {
